@@ -1,0 +1,12 @@
+homePage:
+  path: /
+  controller: App\Controller\PageController::homePage
+
+addPage:
+  path: /add
+  controller: App\Controller\PageController::addPage
+
+showPage:
+  path: /show
+  controller: App\Controller\PageController::ShowPage
+

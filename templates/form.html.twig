@@ -1,0 +1,24 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <br>
+    <nav>
+        <a href="/add/color">addColor</a>
+        <a href="/add/make">addMake</a>
+        <a href="/add/model">addModel</a>
+        <a href="/add/client">addClient</a>
+        <a href="/add/car">addCar</a>
+        <a href="/add/owner">addOwner</a>
+
+    </nav>
+    {% if form is defined %}
+        {% form_theme form 'bootstrap_4_layout.html.twig' %}
+    {% endif %}
+
+    {% if form is defined%}
+        {{ form_start(form) }}
+        {{ form_widget(form)}}
+        {{ form_end(form) }}
+    {% endif %}
+    {% block javascripts %}{% endblock %}
+{% endblock %}

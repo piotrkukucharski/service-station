@@ -1,0 +1,59 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <br>
+    <nav>
+        <a href="/show/color">showColor</a>
+        <a href="/show/make">showMake</a>
+        <a href="/show/model">showModel</a>
+        <a href="/show/client">showClient</a>
+        <a href="/show/car">showCar</a>
+    </nav>
+    <br>
+    <h1>Client</h1>
+        <p>Name: {{ attribute(entities,"firstName") }}</p>
+        <p>LastName: {{ attribute(entities,"lastName") }}</p>
+
+    <details>
+        <summary>Phones</summary>
+        {% if phoneNumbers is iterable and phoneNumbers is not empty%}
+            <ul>
+                {% for phoneNumber in phoneNumbers %}
+                    <li>{{ attribute(phoneNumber,"number") }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </details>
+
+    <details>
+        <summary>Cars</summary>
+        <table>
+            <tr>
+                {% for key,value in columnsCar%}
+                    <th>{{ value }}</th>
+                {% endfor %}
+                <th>Make</th>
+                <th>View</th>
+                <th>Edit</th>
+            </tr>
+            {% if cars is iterable and cars is not empty%}
+                {% for car in cars %}
+                    {% for key,value in columnsCar%}
+                        {% if attribute(car,key) is defined %}
+                            {% if attribute(car,key).timestamp is defined %}
+                                <td>{{ attribute(car,key)|date('Y')}}</td>
+                            {%elseif attribute(attribute(car,key),value) is defined %}
+                                <td>{{ attribute(attribute(car,key),value)}}</td>
+                            {% else %}
+                                <td>{{ attribute(car,key)}}</td>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    <td>{{ attribute(attribute(attribute(car,"modelId"),"makeId"),"make")}}</td>
+                    <td><a href="{{ path(moreDetails,{'slug':attribute(car,"id")}) }}">View</a></td>
+                    <td><a href="{{ path(edit,{'slug':attribute(car,"id")}) }}">Edit</a></td>
+                {% endfor %}
+            {% endif %}
+        </table>
+    </details>
+{% endblock %}

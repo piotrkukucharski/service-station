@@ -1,0 +1,41 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <br>
+    <nav>
+        <a href="/show/color">showColor</a>
+        <a href="/show/make">showMake</a>
+        <a href="/show/model">showModel</a>
+        <a href="/show/client">showClient</a>
+        <a href="/show/car">showCar</a>
+
+    </nav>
+    {% if entities is defined%}
+        <table>
+            <tr>
+                {% for column in columns %}
+                    <th>{{ column }}</th>
+                {% endfor %}
+                {% if moreDetails is defined %}
+                    <th>View</th>
+                {% endif %}
+            {% for entity in entities%}
+                <tr>
+                    {% for column in columns %}
+                        {% if attribute(entity,column) is defined %}
+                            {% if attribute(entity,column).timestamp is defined %}
+                                <td>{{ attribute(entity,column)|date('Y')}}</td>
+                            {% else %}
+                                <td>{{ attribute(entity,column)}}</td>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if moreDetails is defined %}
+                        <td><a href="{{ path(moreDetails,{'slug':attribute(entity,'id')}) }}">View</a></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    {% block javascripts %}{% endblock %}
+{% endblock %}
