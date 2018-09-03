@@ -11,10 +11,12 @@
 
 
 
+	use App\Entity\History;
 	use App\Form\CarType;
 	use App\Form\ClientType;
+	use App\Form\HistoryType;
 	use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-	use Symfony\Bundle\FrameworkBundle\Controller\RedirectController;
+	use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 	use Symfony\Component\Form\Extension\Core\Type\TextType;
 	use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
@@ -59,7 +61,7 @@
 
 
 			}
-			return $this->render('form.html.twig', array(
+			return $this->render('add.html.twig', array(
 				'form' => $form->createView(),
 			));
 		}
@@ -89,7 +91,7 @@
 				}
 				return $this->redirectToRoute('addMake');
 			}
-			return $this->render('form.html.twig', array(
+			return $this->render('add.html.twig', array(
 				'form' => $form->createView(),
 			));
 		}
@@ -126,7 +128,7 @@
 				return $this->redirectToRoute('addModel');
 
 			}
-			return $this->render('form.html.twig', array(
+			return $this->render('add.html.twig', array(
 				'form' => $form->createView(),
 			));
 		}
@@ -154,75 +156,8 @@
 				return $this->redirectToRoute('addClient');
 
 			}
-			return $this->render('form.html.twig', array(
+			return $this->render('add.html.twig', array(
 				'form' => $form->createView(),
 			));
 		}
-
-		/**
-		 * @Route("/add/car",name="addCar")
-		 */
-		public function addCar(Request $request)
-		{
-			$car = new Car();
-			$form = $this->createForm(CarType::class,$car);
-
-			$form->handleRequest($request);
-			if ($form->isSubmitted() && $form->isValid()) {
-				$car = $form->getData();
-				$entityManager = $this->getDoctrine()->getManager();
-				$entityManager->persist($car);
-				try {
-					$entityManager->flush();
-				} catch (UniqueConstraintViolationException $e) {
-					var_dump($e->getMessage());
-				} catch (InvalidArgumentException $e) {
-					var_dump($car);
-				}
-				return $this->redirectToRoute('addCar');
-
-
-			}
-			return $this->render('form.html.twig', array(
-				'form' => $form->createView(),
-			));
-		}
-
-		/**
-		 * @Route("/add/owner",name="addOwner")
-		 */
-		public function addOwner(Request $request)
-		{
-			$form = $this->createFormBuilder()
-				->setMethod("GET")
-				->add("idClient", EntityType::class,array(
-					"class" => Client::class,
-					"choice_label" => "id",
-				))
-				->add("vin", EntityType::class,array(
-					"class" => Car::class,
-					"choice_label" => "vin",
-				))
-				->add('save', SubmitType::class, array('label' => 'Car for Owner'))
-				->getForm();
-
-			$form->handleRequest($request);
-			if ($form->isSubmitted() && $form->isValid()) {
-				$entityManager = $this->getDoctrine()->getManager();
-				$client=$form->getData()['idClient'];
-				$car=$form->getData()['idCar'];
-				$client->addCar($car);
-				$entityManager->persist($client);
-				$entityManager->flush();
-
-				return $this->redirectToRoute('addOwner');
-
-			}
-			return $this->render('form.html.twig', array(
-				'form' => $form->createView(),
-			));
-		}
-
-
-
 	}

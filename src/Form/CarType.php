@@ -74,7 +74,7 @@
 					'widget' => 'choice',
 					'format' => 'yyyy-MM-dd',
 				))
-				->add('save', SubmitType::class, array('label' => 'Edit Car'))
+				->add('save', SubmitType::class, array('label' => 'Car'))
 				->getForm();
 
 

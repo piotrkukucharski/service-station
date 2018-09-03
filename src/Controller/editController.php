@@ -56,7 +56,7 @@
 				return $this->redirectToRoute('addCar');
 			}
 
-			return $this->render('form.html.twig', array(
+			return $this->render('add.html.twig', array(
 				'form' => $form->createView(),
 			));
 		}
@@ -65,7 +65,7 @@
 		 * @Route("/edit/client/{slug}",name="editClient")
 		 */
 		public function editClient(EntityManagerInterface $entityManager,$slug,Request $request){
-			return $this->render('form.html.twig', array(
+			return $this->render('add.html.twig', array(
 				'form' => $form->createView(),
 			));
 		}

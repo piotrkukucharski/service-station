@@ -29,6 +29,8 @@
 	use App\Entity\DriveType;
 	use App\Entity\FuelType;
 	use App\Entity\Transmission;
+	use App\Entity\History;
+
 
 
 
@@ -85,21 +87,6 @@
 			$progressBar->finish();
 		}
 
-		private function test(){
-			$client = new Client();
-			$client->setFirstName($this->faker->firstName);
-			$client->setLastName($this->faker->lastName);
-			$this->em->persist($client);
-			$this->em->flush();
-
-			$phone=new PhoneNumber();
-			$phone->setNumber($this->faker->phoneNumber);
-			$phone->setClientId($client);
-			$this->em->persist($phone);
-			$this->em->flush();
-
-		}
-
 
 		private function fakeClientGenerator(){
 			$client = new Client();
@@ -120,9 +107,17 @@
 			}
 			$this->em->persist($client);
 
-			$client->addCar($this->generateCar());
-			while(rand(0,100)>90){
-				$client->addCar($this->generateCar());
+			$car=$this->generateCar();
+			$client->addCar($car);
+			for($i=rand(1,20);$i>0;--$i){
+				$this->generateHistory($client,$car);
+			}
+			while(rand(0,100)>85){
+				$car=$this->generateCar();
+				$client->addCar($car);
+				for($i=rand(1,20);$i>0;--$i){
+					$this->generateHistory($client,$car);
+				}
 			}
 			$this->em->persist($client);
 			$this->em->flush();
@@ -142,6 +137,16 @@
 			$this->em->persist($car);
 			$this->em->flush();
 			return $car;
+		}
+
+		private function generateHistory($client,$car){
+			$history=new History();
+			$history->setCar($car);
+			$history->setClient($client);
+			$history->setDateTime($this->faker->dateTime());
+			$history->setDescription($this->faker->text(100));
+			$this->em->persist($history);
+			$this->em->flush();
 		}
 
 		private function getModel(){

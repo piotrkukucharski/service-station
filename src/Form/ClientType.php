@@ -25,7 +25,7 @@
 				->setMethod("GET")
 				->add("firstName", TextType::class)
 				->add("lastName", TextType::class)
-				->add('save', SubmitType::class, array('label' => 'Add Model'))
+				->add('save', SubmitType::class, array('label' => 'Add Client'))
 				->getForm();
 		}
 

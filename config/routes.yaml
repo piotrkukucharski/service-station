@@ -8,5 +8,14 @@ addPage:
 
 showPage:
   path: /show
-  controller: App\Controller\PageController::ShowPage
+  controller: App\Controller\PageController::showPage
 
+searchPage:
+  path: /search
+  controller: App\Controller\PageController::searchPage
+
+# app/config/routing.yml
+easy_admin_bundle:
+  resource: "@EasyAdminBundle/Controller/AdminController.php"
+  type:     annotation
+  prefix:   /admin

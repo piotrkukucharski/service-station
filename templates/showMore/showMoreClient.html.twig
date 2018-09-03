@@ -1,5 +1,22 @@
 {% extends "base.html.twig" %}
 
+{% block head_js %}
+    {{ parent() }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.0/js/jquery.tablesorter.js"></script>
+{% endblock %}
+
+
+{% block javascripts %}
+    <script type="text/javascript">
+        $(document).ready(function()
+            {
+                $("#myTable").tablesorter( {dateFormat: 'pt'} );
+            }
+        );
+    </script>
+
+{% endblock %}
+
 {% block body %}
     <br>
     <nav>
@@ -27,33 +44,65 @@
 
     <details>
         <summary>Cars</summary>
-        <table>
-            <tr>
-                {% for key,value in columnsCar%}
-                    <th>{{ value }}</th>
-                {% endfor %}
-                <th>Make</th>
-                <th>View</th>
-                <th>Edit</th>
-            </tr>
-            {% if cars is iterable and cars is not empty%}
-                {% for car in cars %}
-                    {% for key,value in columnsCar%}
-                        {% if attribute(car,key) is defined %}
-                            {% if attribute(car,key).timestamp is defined %}
-                                <td>{{ attribute(car,key)|date('Y')}}</td>
-                            {%elseif attribute(attribute(car,key),value) is defined %}
-                                <td>{{ attribute(attribute(car,key),value)}}</td>
-                            {% else %}
-                                <td>{{ attribute(car,key)}}</td>
-                            {% endif %}
-                        {% endif %}
+        <table id="myTable" class="tablesorter">
+            <thead>
+                <tr>
+                    <th>Make</th>
+                    <th>Model</th>
+                    <th>Vin</th>
+                    <th>DriveType</th>
+                    <th>FuelType</th>
+                    <th>Transmission</th>
+                    <th>Color</th>
+                    <th>BuildDate</th>
+                    <th>ModelYear</th>
+                    <th>View</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if cars is iterable and cars is not empty%}
+                    {% for car in cars %}
+                        <tr>
+                            <td>{{ attribute(attribute(attribute(car,"modelId"),"makeId"),"make")}}</td>
+                            <td>{{ attribute(attribute(car,"modelId"),"model") }}</td>
+                            <td>{{ attribute(car,"vin") }}</td>
+                            <td>{{ attribute(attribute(car,"driveTypeId"),"driveType") }}</td>
+                            <td>{{ attribute(attribute(car,"fuelTypeId"),"fuelType") }}</td>
+                            <td>{{ attribute(attribute(car,"transmissionId"),"transmission") }}</td>
+                            <td>{{ attribute(attribute(car,"colorId"),"color") }}</td>
+                            <td>{{ attribute(car,"buildDate") |date("Y")}}</td>
+                            <td>{{ attribute(car,"modelYear") |date("Y")}}</td>
+                            <td><a href="{{ path(moreDetails,{'slug':attribute(car,"id")}) }}">View</a></td>
+                            <td><a href="{{ path(edit,{'slug':attribute(car,"id")}) }}">Edit</a></td>
+                        </tr>
                     {% endfor %}
-                    <td>{{ attribute(attribute(attribute(car,"modelId"),"makeId"),"make")}}</td>
-                    <td><a href="{{ path(moreDetails,{'slug':attribute(car,"id")}) }}">View</a></td>
-                    <td><a href="{{ path(edit,{'slug':attribute(car,"id")}) }}">Edit</a></td>
-                {% endfor %}
-            {% endif %}
+                {% endif %}
+            </tbody>
         </table>
+    </details>
+
+    <details>
+        <summary>Histories</summary>
+        <table id="myTable" class="tablesorter">
+            <tr>
+                <th>Car</th>
+                <th>Description</th>
+                <th>DateTime</th>
+            </tr>
+            {% for history in histories|sort %}
+                <tr>
+                    <td>{{ attribute(attribute(history,"car"),"vin") }}</td>
+                    <td>{{ attribute(history,"description") }}</td>
+                    <td>{{ attribute(history,"dateTime")|date("m/d/Y") }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <details>
+            <summary>Add</summary>
+            {{ form_start(formHistory) }}
+            {{ form_widget(formHistory)}}
+            {{ form_end(formHistory) }}
+        </details>
     </details>
 {% endblock %}

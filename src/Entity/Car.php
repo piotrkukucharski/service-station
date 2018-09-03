@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -66,6 +68,16 @@ class Car
      * @ORM\ManyToOne(targetEntity="App\Entity\Client", inversedBy="cars")
      */
     private $owner;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\History", mappedBy="car")
+     */
+    private $histories;
+
+    public function __construct()
+    {
+        $this->histories = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -188,6 +200,37 @@ class Car
     public function setOwner(?Client $owner): self
     {
         $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|History[]
+     */
+    public function getHistories(): Collection
+    {
+        return $this->histories;
+    }
+
+    public function addHistory(History $history): self
+    {
+        if (!$this->histories->contains($history)) {
+            $this->histories[] = $history;
+            $history->setCar($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHistory(History $history): self
+    {
+        if ($this->histories->contains($history)) {
+            $this->histories->removeElement($history);
+            // set the owning side to null (unless already changed)
+            if ($history->getCar() === $this) {
+                $history->setCar(null);
+            }
+        }
 
         return $this;
     }

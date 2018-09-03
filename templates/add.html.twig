@@ -3,12 +3,11 @@
 {% block body %}
     <br>
     <nav>
-        <a href="/add/color">addColor</a>
-        <a href="/add/make">addMake</a>
-        <a href="/add/model">addModel</a>
-        <a href="/add/client">addClient</a>
-        <a href="/add/car">addCar</a>
-        <a href="/add/owner">addOwner</a>
+        <a href="{{ path("addColor") }}">addColor</a>
+        <a href="{{ path("addMake") }}">addMake</a>
+        <a href="{{ path("addModel") }}">addModel</a>
+        <a href="{{ path("addClient") }}">addClient</a>
+
 
     </nav>
     {% if form is defined %}

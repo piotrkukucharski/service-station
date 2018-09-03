@@ -22,20 +22,9 @@
 
 	class ShowController extends AbstractController
 	{
-		/**
-		 * @Route("/show/color")
-		 */
-		public function showColor(EntityManagerInterface $entityManager){
-			$repository = $entityManager->getRepository(Color::class);
-			$entities=$repository->findAll();
-			return $this->render('show.html.twig', array(
-				'entities'=>$entities,
-				'columns'=>array('id','color'),
-			));
-		}
 
 		/**
-		 * @Route("/show/make")
+		 * @Route("/show/make",name="showMake")
 		 */
 		public function showMake(EntityManagerInterface $entityManager){
 			$repository = $entityManager->getRepository(Make::class);
@@ -46,40 +35,41 @@
 			));
 		}
 		/**
-		 * @Route("/show/model")
+		 * @Route("/show/model",name="showModel")
 		 */
 		public function showModel(EntityManagerInterface $entityManager){
 			$repository = $entityManager->getRepository(Model::class);
 			$entities=$repository->findAll();
 			return $this->render('show.html.twig', array(
 				'entities'=>$entities,
-				'columns'=>array('id','model'),
+				'columns'=>array('id',array('makeId','make'),'model'),
 			));
 		}
 		/**
-		 * @Route("/show/client")
+		 * @Route("/show/client",name="showClient")
 		 */
 		public function showClient(EntityManagerInterface $entityManager){
 			$repository = $entityManager->getRepository(Client::class);
 			$entities=$repository->findAll();
 			return $this->render('show.html.twig', array(
 				'entities'=>$entities,
-				'columns'=>array('firstName','lastName',),
+				'columns'=>array('id','firstName','lastName',),
 				'moreDetails'=>'showMoreDetailClient',
 
 			));
 		}
 
 		/**
-		 * @Route("/show/car")
+		 * @Route("/show/car",name="showCar")
 		 */
 		public function showCar(EntityManagerInterface $entityManager){
 			$repository = $entityManager->getRepository(Car::class);
 			$entities=$repository->findAll();
 			return $this->render('show.html.twig', array(
 				'entities'=>$entities,
-				'columns'=>array('id','vin','buildDate',
+				'columns'=>array('id',array("modelId","makeId","make"),array("modelId","model"),'vin','buildDate',
 					'modelYear'),
+				'moreDetails'=>'showMoreDetailCar',
 			));
 		}
 
