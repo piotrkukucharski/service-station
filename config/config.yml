@@ -5,3 +5,10 @@ easy_admin:
   - AppBundle\Entity\Car
   - AppBundle\Entity\Client
   - AppBundle\Entity\Color
+
+
+
+
+
+framework:
+  serializer: true
