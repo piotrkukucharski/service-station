@@ -4,3 +4,35 @@
 #        - App\Entity\Product
 #        - App\Entity\Category
 #        - App\Entity\User
+
+
+easy_admin:
+  entities:
+    BodyType:
+      class: App\Entity\BodyType
+    Color:
+      class: App\Entity\Color
+    DriveType:
+      class: App\Entity\DriveType
+    FuelType:
+      class: App\Entity\FuelType
+    PhoneNumber:
+      class:  App\Entity\PhoneNumber
+    Transmission:
+      class: App\Entity\Transmission
+
+    History:
+      class: App\Entity\History
+    Make:
+      class: App\Entity\Make
+    Model:
+      class: App\Entity\Model
+    Car:
+      class: App\Entity\Car
+    Client:
+      class: App\Entity\Client
+      edit:
+        fields:
+          - id
+          - firstName
+          - lastName
